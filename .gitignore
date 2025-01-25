@@ -1,0 +1,15 @@
+# Build files
+*.o
+*.obj
+*.exe
+*.dll
+
+# Visual Studio Code files
+.vscode/
+
+# OS-specific files
+Thumbs.db
+.DS_Store
+
+# Git-specific files
+.git/
