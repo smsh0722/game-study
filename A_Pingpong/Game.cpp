@@ -1,4 +1,4 @@
-#include <Game.h>
+#include "Game.h"
 
 const float paddleVelY = 300.0f;
 const int thickness = 15;
@@ -51,13 +51,13 @@ bool Game::Initialize()
     }
 
     // Create mPaddle
-    mPaddle = new Paddle( Vector2{10.0f, winH/2.0f}, Vector2{0.0f, 300.0f}, 10.0f, 10.0f );
+    mPaddle = new Paddle( Vector2{10.0f, winH/2.0f}, Vector2{0.0f, 300.0f}, thickness, 100.0f );
     if ( mPaddle == nullptr ){
         return -1;
     }
 
     // Create mBall
-    mBall = new Ball( Vector2{winW/2.0f, winH/2.0f}, Vector2{-200.0f, 235.0f}, 10.0f );
+    mBall = new Ball( Vector2{winW/2.0f, winH/2.0f}, Vector2{-200.0f, 235.0f}, 100.0f );
     if ( mBall == nullptr ){
         return -1;
     }
@@ -170,15 +170,29 @@ void Game::GenerateOutput()
     SDL_RenderPresent( mRenderer);
 }
 
-Object2::Object2( Vector2& position, Vector2& velocity )
+Object2::Object2() : mPosition(0.0f, 0.0f), mVelocity(0.0f, 0.0f) {}
+
+Object2::Object2( const Vector2& position, const Vector2& velocity )
 {
     mPosition = position;
     mVelocity = velocity;
 }
 
-Paddle::Paddle( Vector2& position, Vector2& velocity, float width, float height )
+void Object2::UpdatePosition( float deltaTime )
 {
-    Object2(position, velocity);
+    mPosition.x += mVelocity.x*deltaTime;
+    mPosition.y += mVelocity.y*deltaTime;
+}
+
+void Object2::Render( SDL_Renderer* renderer )
+{
+
+}
+
+Paddle::Paddle( const Vector2& position, const Vector2& velocity, float width, float height )
+{
+    mPosition = position;
+    mVelocity = velocity;
     mWidth = width;
     mHeight = height;
     mPaddleDir = STAY;
@@ -207,17 +221,18 @@ void Paddle::Render( SDL_Renderer* renderer )
     // Set green
     SDL_SetRenderDrawColor( renderer, 0, 100, 0, 255 );
     SDL_Rect paddle {
-        mPosition.x,
-        mPosition.y,
-        mWidth,
-        mHeight
+        static_cast<int>(mPosition.x),
+        static_cast<int>(mPosition.y),
+        static_cast<int>(mWidth),
+        static_cast<int>(mHeight)
     };
     SDL_RenderFillRect( renderer, &paddle );
 }
 
-Ball:: Ball( Vector2& position, Vector2& velocity, float radius )
+Ball:: Ball( const Vector2& position, const Vector2& velocity, float radius )
 {
-    Object2(position, velocity);
+    mPosition = position;
+    mVelocity = velocity;
     mRadius = radius;
 }
 
@@ -237,10 +252,10 @@ void Ball::Render( SDL_Renderer* renderer )
     SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
 
     SDL_Rect ball {
-        mPosition.x,
-        mPosition.y,
-        mRadius,
-        mRadius
+        static_cast<int>(mPosition.x),
+        static_cast<int>(mPosition.y),
+        static_cast<int>(mRadius),
+        static_cast<int>(mRadius)
     };
 
     SDL_RenderFillRect( renderer, &ball );

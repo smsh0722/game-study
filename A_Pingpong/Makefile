@@ -1,11 +1,19 @@
+# Compiler and Flags
 CC = g++
-CFLAGS = -I ../External/SDL/include
-LDFLAGS = -L ../External/SDL/lib -lSDL2
-TARGET = Main
-SRC = Main.cpp
+CFLAGS = -Wall -I ../External/SDL2/include -D_REENTRANT
+LDFLAGS = -L ../External/SDL2/lib -lmingw32 -lSDL2main -lSDL2 -mwindows
+SRCS = Main.cpp Game.cpp 
+OBJS = $(SRCS:.cpp=.o)
+EXEC = pingpong
 
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) $(SRC) $(LDFLAGS) -o $(TARGET)
+# Build Targets
+all: $(EXEC)
+
+$(EXEC): $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET)
+	del /q $(OBJS) $(EXEC)
