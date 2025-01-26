@@ -21,7 +21,7 @@ class Object2
 
     protected:
         Vector2 mPosition;
-        Vector2 mVelocity;    
+        Vector2 mVelocity;
 };
 
 enum PaddleDir{ STAY, UP, DOWN };
@@ -47,7 +47,7 @@ class Ball : public Object2
         Ball();
         Ball( const Vector2& position, const Vector2& velocity, float radius );
 
-        void UpdatePosition( float deltaTime ) override;
+        void UpdatePosition( float deltaTime );
         void Render( SDL_Renderer* renderer ) override;
     private:
         float mRadius;

@@ -214,6 +214,12 @@ void Paddle::UpdatePosition( float deltaTime )
     }
 
     // Check range
+    if ( mPosition.y < thickness ){
+        mPosition.y = thickness;
+    }
+    else if ( mPosition.y > (winH - thickness - mHeight) ){
+        mPosition.y = winH - thickness - mHeight;
+    }
 }
 
 void Paddle::Render( SDL_Renderer* renderer )
@@ -241,9 +247,14 @@ void Ball::UpdatePosition( float deltaTime )
     mPosition.x += mVelocity.x * deltaTime;
     mPosition.y += mVelocity.y * deltaTime;
 
-    // Check range
-
     // Bounce
+    if ( mPosition.y <= thickness && mVelocity.y < 0.0f ){
+        mVelocity.y *= -1;
+    }
+    else if ( mPosition.y >= (winH - thickness - mRadius) && mVelocity.y > 0.0f ){
+        mVelocity.y *= -1;
+    }
+        
 }
 
 void Ball::Render( SDL_Renderer* renderer )
