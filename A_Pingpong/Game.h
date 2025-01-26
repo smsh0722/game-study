@@ -1,5 +1,8 @@
 #pragma once
 #include "SDL2/SDL.h"
+#include <vector>
+
+using namespace std;
 
 struct Vector2
 {
@@ -18,13 +21,14 @@ class Object2
 
         virtual void UpdatePosition( float deltaTime );
         virtual void Render(SDL_Renderer* renderer);
-
+        Vector2 getPosition();
     protected:
         Vector2 mPosition;
         Vector2 mVelocity;
 };
 
 enum PaddleDir{ STAY, UP, DOWN };
+
 class Paddle : public Object2
 {
     public:
@@ -34,7 +38,8 @@ class Paddle : public Object2
         void SetDirection( PaddleDir paddleDir );
         void UpdatePosition( float deltaTime ) override;
         void Render( SDL_Renderer* renderer ) override;
-
+        float getWidth();
+        float getHeight();
     private:
         float mWidth;
         float mHeight;
@@ -47,7 +52,7 @@ class Ball : public Object2
         Ball();
         Ball( const Vector2& position, const Vector2& velocity, float radius );
 
-        void UpdatePosition( float deltaTime );
+        void UpdatePosition( float deltaTime, Paddle& paddle );
         void Render( SDL_Renderer* renderer ) override;
     private:
         float mRadius;

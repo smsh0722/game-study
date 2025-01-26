@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 const float paddleVelY = 300.0f;
 const int thickness = 15;
@@ -57,7 +58,7 @@ bool Game::Initialize()
     }
 
     // Create mBall
-    mBall = new Ball( Vector2{winW/2.0f, winH/2.0f}, Vector2{-200.0f, 235.0f}, 100.0f );
+    mBall = new Ball( Vector2{winW/2.0f, winH/2.0f}, Vector2{-200.0f, 235.0f}, 15.0f );
     if ( mBall == nullptr ){
         return -1;
     }
@@ -137,8 +138,7 @@ void Game::UpdateGame()
     mPaddle->UpdatePosition( deltaTime );
 
     // update ball position
-    mBall->UpdatePosition( deltaTime );
-
+    mBall->UpdatePosition( deltaTime, *mPaddle );
 }
 
 void Game::GenerateOutput()
@@ -186,7 +186,11 @@ void Object2::UpdatePosition( float deltaTime )
 
 void Object2::Render( SDL_Renderer* renderer )
 {
+}
 
+Vector2 Object2::getPosition()
+{
+    return mPosition;
 }
 
 Paddle::Paddle( const Vector2& position, const Vector2& velocity, float width, float height )
@@ -235,6 +239,17 @@ void Paddle::Render( SDL_Renderer* renderer )
     SDL_RenderFillRect( renderer, &paddle );
 }
 
+float Paddle::getWidth()
+{
+    return mWidth;
+}
+
+float Paddle::getHeight()
+{
+    return mHeight;
+}
+
+
 Ball:: Ball( const Vector2& position, const Vector2& velocity, float radius )
 {
     mPosition = position;
@@ -242,17 +257,37 @@ Ball:: Ball( const Vector2& position, const Vector2& velocity, float radius )
     mRadius = radius;
 }
 
-void Ball::UpdatePosition( float deltaTime )
+void Ball::UpdatePosition( float deltaTime, Paddle& paddle )
 {
+    // Move
     mPosition.x += mVelocity.x * deltaTime;
     mPosition.y += mVelocity.y * deltaTime;
 
     // Bounce
+    // Check collision with top or bottom wall
     if ( mPosition.y <= thickness && mVelocity.y < 0.0f ){
         mVelocity.y *= -1;
     }
     else if ( mPosition.y >= (winH - thickness - mRadius) && mVelocity.y > 0.0f ){
         mVelocity.y *= -1;
+    }
+
+    // Check collision with right wall
+    if ( mPosition.x >= ( winW - thickness - mRadius) && mVelocity.x > 0.0f ){
+        mVelocity.x *= -1;
+    }
+
+    // Check collision with paddle
+    Vector2 paddlePos = paddle.getPosition();
+    float paddleW = paddle.getWidth();
+    float paddleH = paddle.getHeight();
+    if( mPosition.x <= ( paddlePos.x + paddleW ) ){
+        if ( (paddlePos.y - mRadius) < mPosition.y &&
+                        mPosition.y < (paddlePos.y + paddleH +mRadius ) ){
+            if ( mVelocity.x < 0.0f ){
+                mVelocity.x *= -1;
+            }
+        }
     }
         
 }
