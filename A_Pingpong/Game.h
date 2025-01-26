@@ -52,7 +52,7 @@ class Ball : public Object2
         Ball();
         Ball( const Vector2& position, const Vector2& velocity, float radius );
 
-        void UpdatePosition( float deltaTime, Paddle& paddle );
+        void UpdatePosition( float deltaTime, Paddle& paddle1, Paddle& paddle2 );
         void Render( SDL_Renderer* renderer ) override;
     private:
         float mRadius;
@@ -78,6 +78,7 @@ class Game
 
         bool mIsRunning;
 
-        Paddle* mPaddle;
+        Paddle* mPaddle1;
+        Paddle* mPaddle2;
         Ball* mBall;
 };
