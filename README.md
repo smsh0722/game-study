@@ -1,4 +1,4 @@
 # game-study
 
 ## 1. ping pong
-![image](https://github.com/user-attachments/assets/b5442130-6cf2-4a7f-998d-ea3f5eae820e)
+![pingpong](https://github.com/user-attachments/assets/49f61984-cc47-4475-a20d-c22664ecb9be)
