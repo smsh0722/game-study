@@ -8,6 +8,12 @@ public:
     bool Initialize();
     void RunLoop();
     void Shutdown();
+    
+    void AddActor( class Actor* actor );
+    void RemoveActor( class Actor* actor );
+
+    void AddSprite( class SpriteComponent* spriteComponent );
+    void RemoveSprite( class SpriteComponent* SpriteComponent );
 private:
     void ProcessInput();
     void UpdateGame();
@@ -19,6 +25,11 @@ private:
     bool mIsRunning;
 
     std::vector<class Actor*> mActors;
-    std::vector<class SpritesComponent*> mSprites;
+    std::vector<class Actor*> mPendingActors;
+
+    std::vector<class SpriteComponent*> mSprites;
+
     class ship* ship;
+
+    bool mUpdatingActors;
 };
