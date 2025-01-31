@@ -32,7 +32,7 @@ void Actor::Update(float deltaTime )
 void Actor::UpdateComponents( float deltaTime )
 {
     for ( int i = 0; i < mComponents.size(); i++ ){
-        Component* Component = mComponents[i];
+        Component* component = mComponents[i];
 
         // TODO: Component->Update();
     }
@@ -41,4 +41,24 @@ void Actor::UpdateComponents( float deltaTime )
 void Actor::UpdateActor( float deltaTime )
 {
 
+}
+
+void Actor::AddComponent(  Component* component )
+{
+    mComponents.push_back(component);
+}
+
+void Actor::RemoveComponent(  Component* component )
+{
+    int trg = -1;
+    for ( int i = 0; i < mComponents.size(); i++ ){
+        if ( mComponents[i] == component ){
+            trg = i;
+            break;
+        }
+    }
+
+    if ( trg >= 0 ){
+        mComponents.erase( mComponents.begin() + trg );
+    }
 }
