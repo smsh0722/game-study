@@ -8,7 +8,7 @@ public:
     enum State
     {
         EAlive, EDead, EPaused
-    };
+    } ;
 
     Actor( class Game* game );
     virtual ~Actor();

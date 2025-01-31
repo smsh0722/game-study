@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "SDL2/SDL_image.h"
+#include "Actor.h"
+#include <algorithm>
 
 Game::Game()
 :mWindow(nullptr),
@@ -89,6 +91,7 @@ void Game::UpdateGame()
         ;
     }
 
+    // Get deltaTime
     float deltaTime = (SDL_GetTicks() - mTickCount) / 1000.0f;
     if ( deltaTime > 0.05f ){ // min 20frame delta time
         deltaTime = 0.05f;
@@ -100,7 +103,7 @@ void Game::UpdateGame()
     for ( int i = 0; i < mActors.size(); i++ ){
         Actor* actor = mActors[i];
 
-        // TODO: update actor
+        actor->Update( deltaTime );
     }
     mUpdatingActors = false;
 
@@ -112,11 +115,52 @@ void Game::UpdateGame()
     }
     mPendingActors.clear();
 
-    // Process Dead Actors
+    // Add Dead Actors
     std::vector<Actor*> deadActors;
     for ( int i = 0; i < mActors.size(); i++ ){
         Actor* actor = mActors[i];
 
-        // TODO: Check actor state
+        // TIP : 중간에서 지우면 문제 생길 수 있음
+        Actor::State state = actor->GetState();
+        if ( state == Actor::EDead ){
+            deadActors.push_back(actor);
+        }
+    }
+
+    // Remove dead actors
+    for ( int i = 0; i < deadActors.size(); i++ ){
+        delete deadActors[i];
+        // TIP : destructor에서 mActor 스스로 관리.
+    }
+}
+
+void Game::AddActor( class Actor* actor )
+{
+    if ( mUpdatingActors == true ){
+        mPendingActors.push_back(actor);
+    }
+    else {
+        mActors.push_back(actor);
+    }
+}
+
+void Game::RemoveActor( class Actor* actor )
+{
+    std::vector<class Actor*>::iterator it = std::find(
+        mPendingActors.begin(), mPendingActors.end(), actor
+    );
+
+    if ( it != mActors.end() ){
+        // TIP : .erase()는 copying, moving 가능
+        std::iter_swap(it, mPendingActors.end() - 1 );
+        mPendingActors.pop_back();
+    }
+    else {
+        it = std::find( mActors.begin(), mActors.end(), actor );
+
+        if ( it != mActors.end() ){
+            std::iter_swap(it, mActors.end() -1 );
+            mActors.pop_back();
+        }
     }
 }
