@@ -15,7 +15,7 @@ public:
 
     void Update(float deltaTime);
     void UpdateComponents(float deltaTime);
-    void UpdateActor(float deltaTime);
+    virtual void UpdateActor(float deltaTime);
     
     // Getter/ Setter
     const Vector2& GetPosition() const { return mPosition; }
