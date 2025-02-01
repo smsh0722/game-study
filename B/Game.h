@@ -29,7 +29,7 @@ private:
 
     std::vector<class SpriteComponent*> mSprites;
 
-    class ship* ship;
+    class Ship* ship;
 
     bool mUpdatingActors;
 };

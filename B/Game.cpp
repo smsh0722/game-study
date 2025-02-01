@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "SDL2/SDL_image.h"
 #include "Actor.h"
+#include "Ship.h"
 #include <algorithm>
 
 Game::Game()
@@ -81,8 +82,7 @@ void Game::ProcessInput()
         mIsRunning = false;
     }
 
-    // TODO: Process Input in ship
-
+    ship->ProcessKeyboard(state);
 }
 
 void Game::UpdateGame()
