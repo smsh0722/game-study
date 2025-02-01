@@ -37,7 +37,7 @@ bool Game::Initialize()
         return false;
     }
     
-    // TODO: LoadData();
+    // TODO : LoadData();
 
     mTickCount = SDL_GetTicks();
 
@@ -55,7 +55,7 @@ void Game::RunLoop()
 
 void Game::Shutdown()
 {
-    // TODL: unload Data
+    // TODO : unload Data
     IMG_Quit();
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);

@@ -33,8 +33,7 @@ void Actor::UpdateComponents( float deltaTime )
 {
     for ( int i = 0; i < mComponents.size(); i++ ){
         Component* component = mComponents[i];
-
-        // TODO: Component->Update();
+        component->Update( deltaTime );
     }
 }
 
