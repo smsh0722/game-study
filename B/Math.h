@@ -12,3 +12,13 @@ public:
     
     static const Vector2 Zero;
 };
+
+namespace Math
+{
+    const float PI = 3.1415926535f;
+
+    inline float ToDegrees( float radians )
+    {   // 180 degree = 1PI
+        return (radians / PI) * 180.0f;
+    }
+}

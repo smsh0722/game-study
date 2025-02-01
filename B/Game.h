@@ -13,7 +13,7 @@ public:
     void RemoveActor( class Actor* actor );
 
     void AddSprite( class SpriteComponent* spriteComponent );
-    void RemoveSprite( class SpriteComponent* SpriteComponent );
+    void RemoveSprite( class SpriteComponent* spriteComponent );
 private:
     void ProcessInput();
     void UpdateGame();

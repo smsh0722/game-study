@@ -2,6 +2,7 @@
 #include "SDL2/SDL_image.h"
 #include "Actor.h"
 #include "Ship.h"
+#include "SpriteComponent.h"
 #include <algorithm>
 
 Game::Game()
@@ -162,5 +163,29 @@ void Game::RemoveActor( class Actor* actor )
             std::iter_swap(it, mActors.end() -1 );
             mActors.pop_back();
         }
+    }
+}
+
+void Game::AddSprite( SpriteComponent* spriteComponent )
+{
+    int drawOrder = spriteComponent->GetDrawOrder();
+    std::vector<class SpriteComponent*>::iterator it = mSprites.begin();
+    for  ( it; it != mSprites.end(); it++ ){
+        if ( (*it)->GetDrawOrder() > drawOrder ){
+            break;
+        }
+    }
+
+    mSprites.insert( it, spriteComponent );
+}
+
+void Game::RemoveSprite( SpriteComponent* spriteComponent )
+{
+    std::vector<class SpriteComponent*>::iterator it = 
+        std::find( mSprites.begin(), mSprites.end(), spriteComponent );
+
+    if ( it != mSprites.end() ){
+        std::iter_swap( it, mSprites.end() - 1 );
+        mSprites.pop_back();
     }
 }
