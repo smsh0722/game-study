@@ -45,7 +45,14 @@ void Actor::UpdateActor( float deltaTime )
 
 void Actor::AddComponent(  Component* component )
 {
-    mComponents.push_back(component);
+    int order = component->GetUpdateOrder();
+    std::vector<class Component*>::iterator it = mComponents.begin();
+    for ( it; it != mComponents.end(); it++ ){
+        if ( (*it)->GetUpdateOrder() > order ){
+            mComponents.insert( it, component );
+            break;
+        }
+    }
 }
 
 void Actor::RemoveComponent(  Component* component )
