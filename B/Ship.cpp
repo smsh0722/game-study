@@ -46,15 +46,15 @@ void Ship::ProcessKeyboard( const uint8_t* state )
     mDownSpeed = 0.0f;
     mRightSpeed = 0.0f;
     if ( state[SDL_SCANCODE_W] ){
-        mDownSpeed -= 100.0f;
+        mDownSpeed -= 200.0f;
     }
     if ( state[SDL_SCANCODE_S] ){
-        mDownSpeed += 100.0f;
+        mDownSpeed += 200.0f;
     }
     if ( state[SDL_SCANCODE_A] ){
-        mRightSpeed -= 100.0f;
+        mRightSpeed -= 200.0f;
     }
     if ( state[SDL_SCANCODE_D] ){
-        mRightSpeed += 100.0f;
+        mRightSpeed += 200.0f;
     }
 }
