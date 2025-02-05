@@ -5,7 +5,7 @@
 class AnimSpriteComponent : public SpriteComponent
 {
 public:
-    AnimSpriteComponent( class Actor* actor, int drawOrder=100);
+    AnimSpriteComponent( class Actor* owner, int drawOrder=100);
     
     void Update( float deltaTime ) override;
 	// Set the textures used for animation

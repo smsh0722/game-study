@@ -39,7 +39,7 @@ bool Game::Initialize()
         return false;
     }
     
-    // TODO : LoadData();
+    LoadData();
 
     mTickCount = SDL_GetTicks();
 
@@ -130,9 +130,9 @@ void Game::UpdateGame()
     }
 
     // Remove dead actors
-    for ( size_t i = 0; i < deadActors.size(); i++ ){
-        delete deadActors[i];
-        // TIP : destructor에서 mActor 스스로 관리.
+    for (auto it = deadActors.begin(); it != deadActors.end(); ) {
+        delete *it;           // Delete the actor
+        it = deadActors.erase(it); // Remove from the vector and move to the next element
     }
 }
 

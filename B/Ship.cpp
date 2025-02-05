@@ -1,10 +1,21 @@
 #include "Ship.h"
 #include "Game.h"
+#include "AnimSpriteComponent.h"
 
 Ship::Ship( Game* game )
     :Actor(game)
+    ,mDownSpeed(0.0f)
+    ,mRightSpeed(0.0f)
 {
-    // TODO: Do other things
+    // Create an animated sprite component
+	AnimSpriteComponent* asc = new AnimSpriteComponent(this);
+	std::vector<SDL_Texture*> anims = {
+		game->GetTexture("Assets/Ship01.png"),
+		game->GetTexture("Assets/Ship02.png"),
+		game->GetTexture("Assets/Ship03.png"),
+		game->GetTexture("Assets/Ship04.png"),
+	};
+	asc->SetAnimTextures(anims);
 }
 
 void Ship::UpdateActor( float deltaTime )
@@ -30,8 +41,8 @@ void Ship::UpdateActor( float deltaTime )
 
 void Ship::ProcessKeyboard( const uint8_t* state )
 {
-    mDownSpeed = 0;
-    mRightSpeed = 0;
+    mDownSpeed = 0.0f;
+    mRightSpeed = 0.0f;
     if ( state[SDL_SCANCODE_W] ){
         mDownSpeed -= 100.0f;
     }

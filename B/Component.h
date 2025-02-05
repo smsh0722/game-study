@@ -3,7 +3,7 @@
 class Component
 {
 public:
-    Component( class Actor* actor, const int mUpdateOrder=100 );
+    Component( class Actor* owner, const int mUpdateOrder=100 );
     virtual ~Component();
 
     virtual void Update(float deltaTime);

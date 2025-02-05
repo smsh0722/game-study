@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include "Game.h"
 #include "Component.h"
+#include <algorithm>
 
 Actor::Actor( Game* game )
     : mState(EAlive),
@@ -47,23 +48,20 @@ void Actor::AddComponent(  Component* component )
     std::vector<class Component*>::iterator it = mComponents.begin();
     for ( ; it != mComponents.end(); it++ ){
         if ( (*it)->GetUpdateOrder() > order ){
-            mComponents.insert( it, component );
             break;
         }
     }
+
+    mComponents.insert( it, component );
 }
 
 void Actor::RemoveComponent(  Component* component )
 {
-    int trg = -1;
-    for ( size_t i = 0; i < mComponents.size(); i++ ){
-        if ( mComponents[i] == component ){
-            trg = i;
-            break;
-        }
+    std::vector<class Component*>::iterator it = std::find(
+        mComponents.begin(), mComponents.end(), component
+    );
+    if ( it != mComponents.end() ){
+        mComponents.erase(it);
     }
 
-    if ( trg >= 0 ){
-        mComponents.erase( mComponents.begin() + trg );
-    }
 }

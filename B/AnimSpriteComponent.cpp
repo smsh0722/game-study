@@ -1,8 +1,8 @@
 #include "AnimSpriteComponent.h"
 #include "Actor.h"
 
-AnimSpriteComponent::AnimSpriteComponent( Actor* actor, int drawOrder)
-:SpriteComponent(actor, drawOrder),
+AnimSpriteComponent::AnimSpriteComponent( Actor* owner, int drawOrder)
+:SpriteComponent(owner, drawOrder),
     mCurrFrame(0.0f),
     mAnimFPS(24.0f)
 {

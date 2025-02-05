@@ -4,8 +4,8 @@
 #include "Component.h"
 
 
-SpriteComponent::SpriteComponent( Actor* actor, int drawOrder )
-    : Component(actor),
+SpriteComponent::SpriteComponent( Actor* owner, int drawOrder )
+    : Component(owner),
     mTexture(nullptr),
     mDrawOrder(drawOrder),
     mTexWidth(0),
