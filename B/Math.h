@@ -1,3 +1,5 @@
+#pragma once
+
 // 2D vector
 class Vector2
 {

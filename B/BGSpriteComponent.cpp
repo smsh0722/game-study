@@ -9,7 +9,7 @@ BGSpriteComponent::BGSpriteComponent( Actor* actor, int drawOrder )
 
 void BGSpriteComponent::Update( float deltaTime )
 {
-    for ( int i = 0; i < mBGTextures.size(); i++ ){
+    for ( size_t i = 0; i < mBGTextures.size(); i++ ){
         BGTexture& curBGTexture = mBGTextures[i];
         curBGTexture.mOffset.x += mScrollSpeed * deltaTime;
         // 현재 texture가 화면의 더이상 안 나오는지,
@@ -23,7 +23,7 @@ void BGSpriteComponent::Update( float deltaTime )
 
 void BGSpriteComponent::Draw(SDL_Renderer* renderer )
 {
-    for ( int i = 0; i < mBGTextures.size(); i++ ){
+    for ( size_t i = 0; i < mBGTextures.size(); i++ ){
         SDL_Rect rect;
         rect.w = static_cast<int>(mScreenSize.x);
         rect.h = static_cast<int>(mScreenSize.y);
@@ -48,7 +48,7 @@ void BGSpriteComponent::Draw(SDL_Renderer* renderer )
 
 void BGSpriteComponent::SetBGTextures( const std::vector<SDL_Texture*>& textures )
 {
-    for ( int i = 0; i < textures.size(); i++ ){
+    for ( size_t i = 0; i < textures.size(); i++ ){
         BGTexture tmp;
         tmp.mTexture = textures[i];
         tmp.mOffset.x = i * mScreenSize.x;

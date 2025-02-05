@@ -1,5 +1,6 @@
 #pragma once
 #include "Actor.h"
+#include <stdint.h>
 
 class Ship : public Actor
 {

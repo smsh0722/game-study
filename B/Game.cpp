@@ -4,6 +4,7 @@
 #include "Ship.h"
 #include "SpriteComponent.h"
 #include <algorithm>
+#include "BGSpriteComponent.h"
 
 Game::Game()
 :mWindow(nullptr),
@@ -56,7 +57,7 @@ void Game::RunLoop()
 
 void Game::Shutdown()
 {
-    // TODO : unload Data
+    UnloadData();
     IMG_Quit();
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
@@ -83,7 +84,7 @@ void Game::ProcessInput()
         mIsRunning = false;
     }
 
-    ship->ProcessKeyboard(state);
+    mShip->ProcessKeyboard(state);
 }
 
 void Game::UpdateGame()
@@ -101,7 +102,7 @@ void Game::UpdateGame()
 
     // Update all Actors
     mUpdatingActors = true;
-    for ( int i = 0; i < mActors.size(); i++ ){
+    for ( size_t i = 0; i < mActors.size(); i++ ){
         Actor* actor = mActors[i];
 
         actor->Update( deltaTime );
@@ -109,7 +110,7 @@ void Game::UpdateGame()
     mUpdatingActors = false;
 
     // Add pending actors
-    for ( int i = 0; i < mPendingActors.size(); i++ ){
+    for ( size_t i = 0; i < mPendingActors.size(); i++ ){
         Actor* actor = mPendingActors[i];
 
         mActors.push_back(actor);
@@ -118,7 +119,7 @@ void Game::UpdateGame()
 
     // Add Dead Actors
     std::vector<Actor*> deadActors;
-    for ( int i = 0; i < mActors.size(); i++ ){
+    for ( size_t i = 0; i < mActors.size(); i++ ){
         Actor* actor = mActors[i];
 
         // TIP : 중간에서 지우면 문제 생길 수 있음
@@ -129,10 +130,24 @@ void Game::UpdateGame()
     }
 
     // Remove dead actors
-    for ( int i = 0; i < deadActors.size(); i++ ){
+    for ( size_t i = 0; i < deadActors.size(); i++ ){
         delete deadActors[i];
         // TIP : destructor에서 mActor 스스로 관리.
     }
+}
+
+void Game::GenerateOutput()
+{
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+	SDL_RenderClear(mRenderer);
+	
+	// Draw all sprite components
+	for (auto sprite : mSprites)
+	{
+		sprite->Draw(mRenderer);
+	}
+
+	SDL_RenderPresent(mRenderer);
 }
 
 void Game::AddActor( class Actor* actor )
@@ -170,7 +185,7 @@ void Game::AddSprite( SpriteComponent* spriteComponent )
 {
     int drawOrder = spriteComponent->GetDrawOrder();
     std::vector<class SpriteComponent*>::iterator it = mSprites.begin();
-    for  ( it; it != mSprites.end(); it++ ){
+    for  (; it != mSprites.end(); it++ ){
         if ( (*it)->GetDrawOrder() > drawOrder ){
             break;
         }
@@ -188,4 +203,82 @@ void Game::RemoveSprite( SpriteComponent* spriteComponent )
         std::iter_swap( it, mSprites.end() - 1 );
         mSprites.pop_back();
     }
+}
+
+SDL_Texture* Game::GetTexture( const std::string& fileName )
+{
+    SDL_Texture* tex = nullptr;
+
+    std::unordered_map<std::string, SDL_Texture*>::iterator it;
+    it = mTextures.find(fileName);
+    if ( it != mTextures.end() ){
+        return it->second;
+    }
+    else {
+        SDL_Surface* surf = IMG_Load(fileName.c_str());
+		if (!surf)
+		{
+			SDL_Log("Failed to load texture file %s", fileName.c_str());
+			return nullptr;
+		}
+
+		// Create texture from surface
+		tex = SDL_CreateTextureFromSurface(mRenderer, surf);
+		SDL_FreeSurface(surf);
+		if (!tex)
+		{
+			SDL_Log("Failed to convert surface to texture for %s", fileName.c_str());
+			return nullptr;
+		}
+
+		mTextures.emplace(fileName.c_str(), tex);
+    }
+    return tex;
+}
+
+void Game::LoadData()
+{
+	// Create player's ship
+	mShip = new Ship(this);
+	mShip->SetPosition(Vector2(100.0f, 384.0f));
+	mShip->SetScale(1.5f);
+
+	// Create actor for the background (this doesn't need a subclass)
+	Actor* temp = new Actor(this);
+	temp->SetPosition(Vector2(512.0f, 384.0f));
+	// Create the "far back" background
+	BGSpriteComponent* bg = new BGSpriteComponent(temp);
+	bg->SetScreenSize(Vector2(1024.0f, 768.0f));
+	std::vector<SDL_Texture*> bgtexs = {
+		GetTexture("Assets/Farback01.png"),
+		GetTexture("Assets/Farback02.png")
+	};
+	bg->SetBGTextures(bgtexs);
+	bg->SetScrollSpeed(-100.0f);
+	// Create the closer background
+	bg = new BGSpriteComponent(temp, 50);
+	bg->SetScreenSize(Vector2(1024.0f, 768.0f));
+	bgtexs = {
+		GetTexture("Assets/Stars.png"),
+		GetTexture("Assets/Stars.png")
+	};
+	bg->SetBGTextures(bgtexs);
+	bg->SetScrollSpeed(-200.0f);
+}
+
+void Game::UnloadData()
+{
+	// Delete actors
+	// Because ~Actor calls RemoveActor, have to use a different style loop
+	while (!mActors.empty())
+	{
+		delete mActors.back();
+	}
+
+	// Destroy textures
+	for (auto i : mTextures)
+	{
+		SDL_DestroyTexture(i.second);
+	}
+	mTextures.clear();
 }

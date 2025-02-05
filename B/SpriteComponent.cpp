@@ -8,8 +8,8 @@ SpriteComponent::SpriteComponent( Actor* actor, int drawOrder )
     : Component(actor),
     mTexture(nullptr),
     mDrawOrder(drawOrder),
-    mTexHeight(0),
-    mTexWidth(0)
+    mTexWidth(0),
+	mTexHeight(0)
 {
     mOwner->GetGame()->AddSprite(this);
 }

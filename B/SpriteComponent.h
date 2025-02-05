@@ -16,7 +16,7 @@ public:
     int GetTexWidth() const { return mTexWidth; };
     int GetTexHeight() const { return mTexHeight; };
 
-private:
+protected:
     SDL_Texture* mTexture;
 	int mDrawOrder;
 	int mTexWidth;
