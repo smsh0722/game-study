@@ -133,6 +133,7 @@ void Game::UpdateGame()
     for (auto it = deadActors.begin(); it != deadActors.end(); ) {
         delete *it;           // Delete the actor
         it = deadActors.erase(it); // Remove from the vector and move to the next element
+        // TIP : destructor에서 mActor 스스로 관리.
     }
 }
 

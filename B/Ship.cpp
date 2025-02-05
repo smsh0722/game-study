@@ -20,6 +20,7 @@ Ship::Ship( Game* game )
 
 void Ship::UpdateActor( float deltaTime )
 {
+    Actor::UpdateActor(deltaTime); // TIP: override이지만, 부모의 기본 update부터
     Vector2 curPosition = this->GetPosition();
     curPosition.x += mRightSpeed * deltaTime;
     curPosition.y += mDownSpeed * deltaTime;
@@ -37,6 +38,7 @@ void Ship::UpdateActor( float deltaTime )
     else if ( curPosition.y < 0.0f ){
         curPosition.y = 0.0f;
     }
+    SetPosition(curPosition);
 }
 
 void Ship::ProcessKeyboard( const uint8_t* state )
